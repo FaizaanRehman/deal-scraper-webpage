@@ -1,16 +1,9 @@
 import { PrismaClient } from '@prisma/client';
+import type { Deal } from './filterPosts';
 
 const prisma = new PrismaClient();
 
-type Deal = {
-    id: string;
-    url: string;
-    caption: string;
-    startsAt: Date | null;
-    endsAt: Date | null;
-}
-
-export async function upsertDeals(deals: Deal[]) {
+export async function upsertDeals(deals: Deal[]): Promise<void> {
     for (const deal of deals) {
         if (!deal.url) {
             console.warn('Skipping deal with no URL:', deal);
@@ -21,15 +14,15 @@ export async function upsertDeals(deals: Deal[]) {
             where: { url: deal.url },
             update: {
                 caption: deal.caption,
-                startsAt: deal.startsAt ?? undefined,
-                endsAt: deal.endsAt ?? undefined,
+                startsAt: deal.dateRange.start,
+                endsAt: deal.dateRange.end,
                 updatedAt: new Date(),
             },
             create: {
                 caption: deal.caption,
                 url: deal.url,
-                startsAt: deal.startsAt ?? undefined,
-                endsAt: deal.endsAt ?? undefined,
+                startsAt: deal.dateRange.start,
+                endsAt: deal.dateRange.end,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             }

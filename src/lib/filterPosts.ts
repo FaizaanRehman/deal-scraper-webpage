@@ -1,9 +1,9 @@
 import { DATE_PATTERNS, KEYWORDS } from "./constants";
 import * as chrono from 'chrono-node'
 
-type DateRange = { start: Date | null; end: Date | null };
+export type DateRange = { start?: Date; end?: Date };
 
-interface Post {
+type Post = {
     id: string;
     caption: string;
     url: string;
@@ -11,16 +11,16 @@ interface Post {
     owner: string;
 }
 
-interface Deal {
+export type Deal = {
     caption: string;
     matches: string[];
     url: string;
-    dateRange: DateRange | null;
+    dateRange: DateRange;
     owner: string;
 }
 
-export function filterPosts(posts: Post[]): Array<Deal> {
-    const deals: Array<Deal> = [];
+export function filterPosts(posts: Post[]): Deal[] {
+    const deals: Deal[] = [];
     for (const { caption, url, owner } of posts) {
         if (typeof caption !== "string") continue;
 
@@ -39,7 +39,7 @@ export function filterPosts(posts: Post[]): Array<Deal> {
     return deals;
 }
 
-function extractDates(text: string): DateRange | null {
+function extractDates(text: string): DateRange {
     for (const pattern of DATE_PATTERNS) {
         const match = text.match(pattern);
         if (!match) continue;
@@ -47,14 +47,14 @@ function extractDates(text: string): DateRange | null {
         const groups = match.slice(1); // first group is full match
         const parsedDates = groups
             .map(group => chrono.parseDate(group.trim()))
-            .filter((date): date is Date => date !== null); // filter failed parses
+            .filter((date): date is Date => date !== null); // filter out failed parses
             
         if (parsedDates.length === 0) {
-            return { start: null, end: null };
+            return { start: undefined, end: undefined };
         } else {
             return { start: parsedDates[0], end: parsedDates.at(-1) ?? parsedDates[0] };
         }
     }
 
-    return null;
+    return { start: undefined, end: undefined };
 }

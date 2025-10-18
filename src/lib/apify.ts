@@ -23,8 +23,7 @@ export async function fetchInstagramPosts(): Promise<InstagramPost[]> {
         resultsLimit: 10,
         skipPinnedPosts: false,
         username: [
-            "pizzakarachi",
-            "dspotcafe"
+            "krispyfry_chicken"
         ]
     });
 
@@ -34,7 +33,7 @@ export async function fetchInstagramPosts(): Promise<InstagramPost[]> {
 
     if (!datasetId) throw new Error("No dataset returned from Apify run.");
 
-    const posts = [];
+    const posts: InstagramPost[] = [];
 
     // Use pagination to efficiently handle large datasets
     const batchSize = 1000;
@@ -43,11 +42,11 @@ export async function fetchInstagramPosts(): Promise<InstagramPost[]> {
         const { items, total } = await client.dataset(datasetId).listItems({ limit: batchSize, offset });
         posts.push(
             ...items.map(item => ({
-                id: item.id,
-                caption: item.caption,
-                url: item.url,
-                timestamp: item.timestamp,
-                owner: item.owner
+                id: item.id as string,
+                caption: item.caption as string,
+                url: item.url as string,
+                timestamp: item.timestamp as string,
+                owner: item.owner as string
             }))
         );
         offset += batchSize;

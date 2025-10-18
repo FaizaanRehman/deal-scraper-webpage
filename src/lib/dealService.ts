@@ -2,7 +2,7 @@ import { fetchInstagramPosts } from "@/lib/apify";
 import { upsertDeals } from "@/lib/dealRepository";
 import { filterPosts } from "@/lib/filterPosts";
 
-export async function refreshDeals() {
+export async function refreshDeals(): Promise<void> {
     const posts = await fetchInstagramPosts();
     const deals = filterPosts(posts);
     await upsertDeals(deals);
