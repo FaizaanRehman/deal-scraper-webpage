@@ -1,15 +1,8 @@
 import { DATE_PATTERNS, KEYWORDS } from "./constants";
+import type { InstagramPost } from "./apify";
 import * as chrono from 'chrono-node'
 
 export type DateRange = { start?: Date; end?: Date };
-
-type Post = {
-    id: string;
-    caption: string;
-    url: string;
-    timestamp: string;
-    owner: string;
-}
 
 export type Deal = {
     caption: string;
@@ -19,7 +12,7 @@ export type Deal = {
     owner: string;
 }
 
-export function filterPosts(posts: Post[]): Deal[] {
+export function filterPosts(posts: InstagramPost[]): Deal[] {
     const deals: Deal[] = [];
     for (const { caption, url, owner } of posts) {
         if (typeof caption !== "string") continue;
