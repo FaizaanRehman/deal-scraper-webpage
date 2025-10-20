@@ -4,9 +4,10 @@ import { refreshDeals } from "@/lib/dealService";
 const API_KEY = process.env.REFRESH_DEALS_API_KEY;
 
 export async function POST(request : NextRequest) {
-    const apiKey = request.headers.get("x-api-key");
+    const authorization = request.headers.get('Authorization');
+    const secret = process.env.CRON_SECRET;
 
-    if (apiKey !== API_KEY) {
+    if (authorization !== `Bearer ${secret}`) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     
