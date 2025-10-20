@@ -12,24 +12,34 @@ export type Deal = {
     owner: string;
 }
 
+/**
+ * Filters a list of Instagram posts, returning only those that contain
+ * deal-related keywords and have associated date ranges if possible.
+ */
 export function filterPosts(posts: InstagramPost[]): Deal[] {
-    const deals: Deal[] = [];
-    for (const { caption, url, owner } of posts) {
-        if (typeof caption !== "string") continue;
+    // lowercase keywords for case-insensitive matching
+    const lowerKeywords = KEYWORDS.map(keyword => keyword.toLowerCase());
 
-        const matches = KEYWORDS.filter(
-            keyword => caption.toLowerCase().includes(keyword.toLowerCase())
-        );
+    return posts.reduce<Deal[]>((deals, post) => {
+        if (typeof post.caption !== "string") return deals; // skip posts without captions
 
-        if (matches.length > 0) {
-            const dateRange = extractDates(caption);
-            deals.push({ caption, matches, url, dateRange, owner });
-        }
-    }
+        const lowercaseCaption : string = post.caption.toLowerCase();
+        const matches : string[] = lowerKeywords.filter(keyword => lowercaseCaption.includes(keyword));
 
-    deals.sort((a, b) => b.matches.length - a.matches.length);
+        if (matches.length === 0) return deals; // no keywords matched, skip
 
-    return deals;
+        const dateRange : DateRange = extractDates(post.caption);
+        deals.push({
+            caption: post.caption,
+            matches,
+            url: post.url,
+            dateRange,
+            owner: post.owner
+        });
+
+        return deals;
+        
+    }, []).sort((a, b) => b.matches.length - a.matches.length);
 }
 
 function extractDates(text: string): DateRange {

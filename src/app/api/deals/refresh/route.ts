@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { refreshDeals } from "@/lib/dealService";
 
-const API_KEY = process.env.REFRESH_DEALS_API_KEY;
+const secret = process.env.CRON_SECRET;
 
-export async function POST(request : NextRequest) {
+export async function POST(request : NextRequest): Promise<NextResponse> {
     const authorization = request.headers.get('Authorization');
-    const secret = process.env.CRON_SECRET;
 
     if (authorization !== `Bearer ${secret}`) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

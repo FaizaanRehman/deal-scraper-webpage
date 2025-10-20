@@ -26,14 +26,22 @@ export async function fetchInstagramPosts(): Promise<InstagramPost[]> {
         username: INSTAGRAM_USERNAMES
     });
 
-    if (actorRun.status !== 'SUCCEEDED') throw new Error('Apify actor failed');
+    if (actorRun.status !== 'SUCCEEDED') {
+        console.error(`[Apify] Actor failed with status: ${actorRun.status}`);
+        console.error(`Actor Run ID: ${actorRun.id}`);
+        throw new Error('Apify actor failed');
+    }
 
     const datasetId = actorRun?.defaultDatasetId;
 
-    if (!datasetId) throw new Error("No dataset returned from Apify run.");
+    if (!datasetId) {
+        console.error(`[Apify] No dataset ID returned from actor run ${actorRun.id}`);
+        throw new Error("No dataset returned from Apify run.");
+    }
+    
+    console.log(`[Apify] Fetching results from dataset ${datasetId}`);
 
     const posts: InstagramPost[] = [];
-
     // Use pagination to efficiently handle large datasets
     const batchSize = 1000;
     let offset = 0;
@@ -51,6 +59,8 @@ export async function fetchInstagramPosts(): Promise<InstagramPost[]> {
         offset += batchSize;
         if (offset >= total) break;
     }
+
+    console.log(`Fetched ${posts.length} posts from Instagram via Apify.`);
 
     return posts;
 }
