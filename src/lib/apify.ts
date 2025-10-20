@@ -1,4 +1,5 @@
 import { ApifyClient } from "apify-client";
+import { INSTAGRAM_USERNAMES } from "./constants";
 
 export interface InstagramPost {
     id: string;
@@ -19,12 +20,10 @@ export async function fetchInstagramPosts(): Promise<InstagramPost[]> {
     const client = new ApifyClient({ token });
 
     const actorRun = await client.actor(actorId).call({
-        onlyPostsNewerThan: "2 days",
-        resultsLimit: 10,
-        skipPinnedPosts: false,
-        username: [
-            "krispyfry_chicken"
-        ]
+        onlyPostsNewerThan: "1 day",
+        resultsLimit: 20,
+        skipPinnedPosts: true,
+        username: INSTAGRAM_USERNAMES
     });
 
     if (actorRun.status !== 'SUCCEEDED') throw new Error('Apify actor failed');

@@ -18,3 +18,28 @@ export const DATE_PATTERNS = [
     /(\w+ \d{1,2})(?:st|nd|rd|th)?/i,
     /(\w+day)/i,
 ] as const;
+
+export const INSTAGRAM_USERNAMES = [
+  "marcelloeats",
+  "torontofood.guide",
+  "halalornothing",
+  "munchhalal",
+  "oneworldhalalfoodie",
+  "ttceats",
+  "torontohalal",
+  "halal_to",
+  "banbanchk.ca",
+  "banbanchk.scarborough",
+  "krispykremecan",
+  "shelbyscanada",
+  "chickenndough",
+  "krispyfry_chicken",
+  "simbashotchicken",
+  "burnsroadkarachi",
+  "tahinisrestaurants",
+  "sumaqbbq",
+  "aleppokebab.ca",
+  "pizzakarachi",
+  "wingspotmarkham",
+  "dspotcafe"
+] as const;
