@@ -1,8 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 
 declare global {
-    // Prevent multiple instances of PrismaClient in development (hot reloads) 
-    var prisma: PrismaClient | undefined;
+  // Prevent multiple instances of PrismaClient in development (hot reloads)
+  var prisma: PrismaClient | undefined;
 }
 
 const prisma = global.prisma ?? new PrismaClient();
