@@ -12,12 +12,23 @@ interface Deal {
 
 export default function Home() {
     const [deals, setDeals] = useState<Deal[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         async function fetchDeals() {
-            const response = await fetch('/api/deals');
-            const data = await response.json();
-            setDeals(data);
+            try {
+                const response = await fetch('/api/deals');
+                if (!response.ok) throw new Error('Failed to fetch');
+                const data = await response.json();
+                setDeals(data);
+            }
+            catch (error) {
+                console.error('Error fetching deals:', error);
+                setDeals([]); // fallback to empty array
+            } finally {
+                setLoading(false);
+            }
+
         }
         fetchDeals();
     }, []);
@@ -25,13 +36,21 @@ export default function Home() {
     return (
         <div>
             <h1>Upcoming Deals</h1>
-            <ul>
-                {deals.map(deal => (
-                    <li key={deal.id}>
-                        <a href={deal.url} target="_blank" rel="noopener noreferrer">{deal.caption}</a>
-                    </li>
-                ))}
-            </ul>
+            { loading ? (
+                <p>Loading deals...</p>
+            ) : deals.length === 0 ? (
+                <p>No deals at the moment. Check back soon!</p>
+            ) : (
+                <ul>
+                    {deals.map(deal => (
+                        <li key={deal.id}>
+                            <a href={deal.url} target="_blank" rel="noopener noreferrer">
+                                {deal.caption}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     )
 }
