@@ -1,0 +1,30 @@
+name: Daily Deal Refresh
+
+on:
+  schedule:
+    - cron: '0 13 * * *' # Runs every day at 13:00 UTC
+  workflow_dispatch: # Allows manual triggering of the workflow
+
+jobs:
+  refresh-deals:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run refresh script
+        run: npx tsx scripts/refreshDeals.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          APIFY_API_TOKEN: ${{ secrets.APIFY_API_TOKEN }}
+          APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
