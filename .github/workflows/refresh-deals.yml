@@ -2,7 +2,7 @@ name: Daily Deal Refresh
 
 on:
   schedule:
-    - cron: '0 13 * * *' # Runs every day at 13:00 UTC
+    - cron: '0 18 * * *' # Runs every day at 13:00 UTC
   workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
