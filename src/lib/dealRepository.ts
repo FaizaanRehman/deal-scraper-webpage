@@ -8,22 +8,28 @@ export async function upsertDeals(deals: Deal[]): Promise<void> {
       continue;
     }
 
+    const now = new Date();
+    const startsAt: Date = deal.dateRange.start ?? now; // default to now
+    const endsAt: Date =
+      deal.dateRange.end ??
+      new Date(startsAt.getTime() + 7 * 24 * 60 * 60 * 1000); // default to one week from now
+
     try {
       await prisma.deal.upsert({
         where: { url: deal.url },
         update: {
           caption: deal.caption,
-          startsAt: deal.dateRange.start,
-          endsAt: deal.dateRange.end,
-          updatedAt: new Date(),
+          startsAt: startsAt,
+          endsAt: endsAt,
+          updatedAt: now,
         },
         create: {
           caption: deal.caption,
           url: deal.url,
-          startsAt: deal.dateRange.start,
-          endsAt: deal.dateRange.end,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          startsAt: startsAt,
+          endsAt: endsAt,
+          createdAt: now,
+          updatedAt: now,
         },
       });
     } catch (error) {
