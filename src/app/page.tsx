@@ -1,14 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-
-interface Deal {
-  id: number;
-  caption: string;
-  url: string;
-  startsAt: string;
-  endsAt: string;
-}
+import Deal from '@/types/deal';
+import DealCard from '@/components/DealCard';
 
 export default function Home() {
   const [deals, setDeals] = useState<Deal[]>([]);
@@ -32,23 +26,26 @@ export default function Home() {
   }, []);
 
   return (
-    <div>
-      <h1>Upcoming Deals</h1>
-      {loading ? (
-        <p>Loading deals...</p>
-      ) : deals.length === 0 ? (
-        <p>No deals at the moment. Check back soon!</p>
-      ) : (
-        <ul>
-          {deals.map((deal) => (
-            <li key={deal.id}>
-              <a href={deal.url} target="_blank" rel="noopener noreferrer">
-                {deal.caption}
-              </a>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <main className="min-h-screen bg-gray-50 px-4 py-8">
+      <div className="mx-auto max-w-5xl">
+        <header className="mb-8 text-center">
+          <h1 className="text-3xl font-bold text-gray-900">Upcoming Deals</h1>
+        </header>
+
+        {loading ? (
+          <p className="text-center text-gray-500">Loading deals...</p>
+        ) : deals.length === 0 ? (
+          <p className="text-center text-gray-500">
+            No deals at the moment. Check back soon!
+          </p>
+        ) : (
+          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {deals.map((deal) => (
+              <DealCard key={deal.id} deal={deal} />
+            ))}
+          </ul>
+        )}
+      </div>
+    </main>
   );
 }

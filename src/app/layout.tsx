@@ -1,3 +1,5 @@
+import './globals.css';
+
 export const metadata = {
   title: 'Deal Scraper',
   description: 'Find the latest deals from Instagram posts',
