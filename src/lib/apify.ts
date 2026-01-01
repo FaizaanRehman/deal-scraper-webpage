@@ -1,5 +1,5 @@
 import { ApifyClient } from 'apify-client';
-import { INSTAGRAM_USERNAMES } from './constants';
+import { INSTAGRAM_SOURCES } from '@/constants/sources';
 
 export interface InstagramPost {
   id: string;
@@ -25,7 +25,7 @@ export async function fetchInstagramPosts(): Promise<InstagramPost[]> {
     onlyPostsNewerThan: '1 day',
     resultsLimit: 20,
     skipPinnedPosts: true,
-    username: INSTAGRAM_USERNAMES,
+    username: INSTAGRAM_SOURCES,
   });
 
   if (actorRun.status !== 'SUCCEEDED') {
