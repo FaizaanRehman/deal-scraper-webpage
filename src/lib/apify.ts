@@ -25,8 +25,8 @@ export async function fetchInstagramPosts(): Promise<InstagramPost[]> {
   const client = new ApifyClient({ token });
 
   const actorRun = await client.actor(actorId).call({
-    onlyPostsNewerThan: '7 days',
-    resultsLimit: 50,
+    onlyPostsNewerThan: '1 day',
+    resultsLimit: 20,
     skipPinnedPosts: true,
     username: INSTAGRAM_SOURCES,
   });
