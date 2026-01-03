@@ -1,12 +1,15 @@
 import { ApifyClient } from 'apify-client';
+import { InstagramMediaType } from '@prisma/client';
 import { INSTAGRAM_SOURCES } from '@/constants/sources';
 
 export interface InstagramPost {
   id: string;
   caption: string;
   url: string;
+  imageUrl: string;
   timestamp: string;
   owner: string;
+  mediaType: InstagramMediaType;
 }
 
 export async function fetchInstagramPosts(): Promise<InstagramPost[]> {
@@ -22,8 +25,8 @@ export async function fetchInstagramPosts(): Promise<InstagramPost[]> {
   const client = new ApifyClient({ token });
 
   const actorRun = await client.actor(actorId).call({
-    onlyPostsNewerThan: '1 day',
-    resultsLimit: 20,
+    onlyPostsNewerThan: '7 days',
+    resultsLimit: 50,
     skipPinnedPosts: true,
     username: INSTAGRAM_SOURCES,
   });
@@ -58,8 +61,10 @@ export async function fetchInstagramPosts(): Promise<InstagramPost[]> {
         id: item.id as string,
         caption: item.caption as string,
         url: item.url as string,
+        imageUrl: item.displayUrl as string,
         timestamp: item.timestamp as string,
-        owner: item.owner as string,
+        owner: item.ownerUsername as string,
+        mediaType: mapMediaType(item.type as string),
       }))
     );
     offset += batchSize;
@@ -69,4 +74,15 @@ export async function fetchInstagramPosts(): Promise<InstagramPost[]> {
   console.log(`Fetched ${posts.length} posts from Instagram via Apify.`);
 
   return posts;
+}
+
+function mapMediaType(type: string): InstagramMediaType {
+  switch (type?.toLowerCase()) {
+    case 'video':
+      return InstagramMediaType.VIDEO;
+    case 'sidecar':
+      return InstagramMediaType.CAROUSEL;
+    default:
+      return InstagramMediaType.IMAGE;
+  }
 }

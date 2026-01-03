@@ -13,10 +13,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum InstagramMediaType {
+  IMAGE
+  VIDEO
+  CAROUSEL
+}
+
 model Deal {
   id         Int      @id @default(autoincrement())
+  owner      String   @default("unknown")
   caption    String
   url        String   @unique
+  imageUrl   String   @default("") // thumbnail / preview imageUrl
+  mediaType  InstagramMediaType @default(IMAGE)
   startsAt   DateTime?
   endsAt     DateTime?
   createdAt  DateTime @default(now())

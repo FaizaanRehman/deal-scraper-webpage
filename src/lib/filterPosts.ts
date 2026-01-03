@@ -6,14 +6,17 @@ import {
   parseDateSignal,
 } from '@/lib/dateSignals';
 import type { InstagramPost } from './apify';
+import { InstagramMediaType } from '@prisma/client';
 
 export type Deal = {
   caption: string;
   matches: string[];
   url: string;
+  imageUrl: string;
   start: Date;
   end: Date;
   owner: string;
+  mediaType: InstagramMediaType;
 };
 
 /**
@@ -40,9 +43,11 @@ export function filterPosts(posts: InstagramPost[]): Deal[] {
       caption: post.caption,
       matches: matchedValuePatterns.map((r) => r.source),
       url: post.url,
+      imageUrl: post.imageUrl,
       start: dateRange.start,
       end: dateRange.end,
       owner: post.owner,
+      mediaType: post.mediaType,
     });
 
     return deals;
