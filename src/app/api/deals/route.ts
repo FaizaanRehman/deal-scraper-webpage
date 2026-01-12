@@ -7,7 +7,7 @@ export async function GET(): Promise<NextResponse> {
     const now = new Date();
     const cutoff: Date = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
-    const activeDeals = await prisma.deal.findMany({
+    const currentDeals = await prisma.deal.findMany({
       where: {
         startsAt: { lte: now }, // deals that have started
         endsAt: { gte: cutoff }, // and meet the cutoff
@@ -23,8 +23,13 @@ export async function GET(): Promise<NextResponse> {
     });
 
     // Active deals should appear before upcoming deals
-    const deals = [...activeDeals, ...upcomingDeals];
-    return NextResponse.json(deals, { status: 200 });
+    return NextResponse.json(
+      {
+        current: currentDeals,
+        upcoming: upcomingDeals,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error(error);
     return NextResponse.json(
