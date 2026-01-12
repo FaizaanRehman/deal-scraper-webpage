@@ -53,7 +53,7 @@ export default function Home() {
                 </h2>
                 <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {deals.current.map((deal) => (
-                    <DealCard key={deal.id} deal={deal} />
+                    <DealCard key={deal.id} deal={deal} showStartDate={false} showEndDate={true}/>
                   ))}
                 </ul>
               </section>
@@ -67,7 +67,7 @@ export default function Home() {
                 </h2>
                 <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {deals.upcoming.map((deal) => (
-                    <DealCard key={deal.id} deal={deal} />
+                    <DealCard key={deal.id} deal={deal} showStartDate={true} showEndDate={false}/>
                   ))}
                 </ul>
               </section>
