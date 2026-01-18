@@ -21,11 +21,15 @@ export const DATE_TYPE = {
   NUMERIC_RANGE: 'NUMERIC_RANGE',
 
   WEEKDAY: 'WEEKDAY',
+} as const;
 
+export const DATE_MODIFIER_TYPE = {
   ENDING: 'ENDING',
 } as const;
 
 export type DateType = (typeof DATE_TYPE)[keyof typeof DATE_TYPE];
+export type DateModifierType =
+  (typeof DATE_MODIFIER_TYPE)[keyof typeof DATE_MODIFIER_TYPE];
 
 export const DATE_PATTERNS = {
   absolute: {
@@ -64,8 +68,9 @@ export const DATE_PATTERNS = {
   single: {
     [DATE_TYPE.WEEKDAY]: new RegExp(`\\b${WEEKDAY}\\b`, 'i'),
   },
+} as const;
 
-  modifiers: {
-    [DATE_TYPE.ENDING]: /\b(until|end(s|ing)?|valid\s+(until|through))\b/i,
-  },
+export const DATE_PATTERN_MODIFIERS = {
+  [DATE_MODIFIER_TYPE.ENDING]:
+    /\b(until|end(s|ing)?(\s+on)?|valid\s+through)\b/i,
 } as const;

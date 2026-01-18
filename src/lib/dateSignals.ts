@@ -1,10 +1,16 @@
-import { DATE_PATTERNS, DATE_TYPE } from '@/constants/datePatterns';
+import {
+  DATE_PATTERN_MODIFIERS,
+  DATE_PATTERNS,
+  DATE_TYPE,
+  DATE_MODIFIER_TYPE,
+} from '@/constants/datePatterns';
 import * as chrono from 'chrono-node';
 
 export type DateSignal = {
   group: string;
   type: string;
   match: RegExpMatchArray;
+  modifierType?: string;
 };
 
 export type DateRange = {
@@ -17,6 +23,14 @@ export function detectDateSignal(text: string): DateSignal | null {
     for (const [type, regex] of Object.entries(patterns)) {
       const match = text.match(regex);
       if (match) {
+        for (const [modifierType, modifierRegex] of Object.entries(
+          DATE_PATTERN_MODIFIERS
+        )) {
+          const modifier = text.match(modifierRegex);
+          if (modifier) {
+            return { group, type, match, modifierType };
+          }
+        }
         return { group, type, match };
       }
     }
@@ -28,6 +42,10 @@ export function parseDateSignal(signal: DateSignal): DateRange | null {
   const text = signal.match[0];
   const now = new Date();
 
+  // If ending modifier is present, assume deal has started already
+  const isDealCurrentlyActive =
+    signal.modifierType === DATE_MODIFIER_TYPE.ENDING;
+
   switch (signal.type) {
     // Absolute date
     case DATE_TYPE.MONTH_DAY:
@@ -36,7 +54,7 @@ export function parseDateSignal(signal: DateSignal): DateRange | null {
       if (!date) return null;
 
       return {
-        start: startOfDay(date),
+        start: startOfDay(isDealCurrentlyActive ? now : date),
         end: endOfDay(date),
       };
     }
@@ -64,7 +82,7 @@ export function parseDateSignal(signal: DateSignal): DateRange | null {
       tomorrow.setDate(tomorrow.getDate() + 1);
 
       return {
-        start: startOfDay(tomorrow),
+        start: startOfDay(isDealCurrentlyActive ? now : tomorrow),
         end: endOfDay(tomorrow),
       };
     }
@@ -75,7 +93,7 @@ export function parseDateSignal(signal: DateSignal): DateRange | null {
       end.setDate(start.getDate() + 6);
 
       return {
-        start: startOfDay(start),
+        start: startOfDay(isDealCurrentlyActive ? now : start),
         end: endOfDay(end),
       };
     }
@@ -86,7 +104,7 @@ export function parseDateSignal(signal: DateSignal): DateRange | null {
       end.setDate(start.getDate() + 6);
 
       return {
-        start: startOfDay(start),
+        start: startOfDay(isDealCurrentlyActive ? now : start),
         end: endOfDay(end),
       };
     }
@@ -97,7 +115,7 @@ export function parseDateSignal(signal: DateSignal): DateRange | null {
       sunday.setDate(saturday.getDate() + 1);
 
       return {
-        start: startOfDay(saturday),
+        start: startOfDay(isDealCurrentlyActive ? now : saturday),
         end: endOfDay(sunday),
       };
     }
@@ -108,7 +126,7 @@ export function parseDateSignal(signal: DateSignal): DateRange | null {
       sunday.setDate(saturday.getDate() + 1);
 
       return {
-        start: startOfDay(saturday),
+        start: startOfDay(isDealCurrentlyActive ? now : saturday),
         end: endOfDay(sunday),
       };
     }
@@ -133,7 +151,6 @@ export function parseDateSignal(signal: DateSignal): DateRange | null {
     case DATE_TYPE.NUMERIC_RANGE:
     case DATE_TYPE.WEEKDAY_RANGE:
     case DATE_TYPE.WEEKDAY:
-    case DATE_TYPE.ENDING:
       return {
         start: startOfDay(now),
         end: endOfDay(new Date(now.getTime() + 24 * 60 * 60 * 1000)),
