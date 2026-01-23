@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.13.0",
+    "@supabase/supabase-js": "^2.91.1",
     "apify-client": "^2.21.0",
     "chrono-node": "^2.8.4",
     "lucide-react": "^0.562.0",
@@ -32,6 +33,7 @@
     "prettier": "^3.6.2",
     "tailwindcss": "^4.1.18",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.2"
   }
 }
