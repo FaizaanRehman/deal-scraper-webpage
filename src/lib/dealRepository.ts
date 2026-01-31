@@ -1,10 +1,10 @@
 import prisma from './prisma';
 import type { Deal } from './filterPosts';
-import { uploadDealPreviewImage } from './supabaseServer';
+import { uploadDealPreviewImage } from './cloudinaryServer';
 
 export async function upsertDeals(deals: Deal[]): Promise<void> {
   const now = new Date();
-  
+
   await Promise.all(
     deals.map(async (deal) => {
       if (!deal.url) {
