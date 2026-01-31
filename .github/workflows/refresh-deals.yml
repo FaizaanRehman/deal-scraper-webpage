@@ -28,3 +28,5 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           APIFY_API_TOKEN: ${{ secrets.APIFY_API_TOKEN }}
           APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
