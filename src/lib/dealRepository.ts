@@ -1,6 +1,7 @@
 import prisma from './prisma';
 import type { Deal } from './filterPosts';
 import { uploadDealPreviewImage } from './cloudinaryServer';
+import { generateDealTitle } from './huggingFaceServer';
 
 export async function upsertDeals(deals: Deal[]): Promise<void> {
   const now = new Date();
@@ -15,6 +16,8 @@ export async function upsertDeals(deals: Deal[]): Promise<void> {
       const uploadedImageUrl = await uploadDealPreviewImage(deal);
       if (uploadedImageUrl) deal.imageUrl = uploadedImageUrl;
 
+      const title = await generateDealTitle(deal.caption);
+
       try {
         await prisma.deal.upsert({
           where: { url: deal.url },
@@ -23,6 +26,7 @@ export async function upsertDeals(deals: Deal[]): Promise<void> {
             owner: deal.owner,
             imageUrl: deal.imageUrl,
             mediaType: deal.mediaType,
+            title,
             startsAt: deal.start,
             endsAt: deal.end,
             updatedAt: now,
@@ -33,6 +37,7 @@ export async function upsertDeals(deals: Deal[]): Promise<void> {
             url: deal.url,
             imageUrl: deal.imageUrl,
             mediaType: deal.mediaType,
+            title,
             startsAt: deal.start,
             endsAt: deal.end,
             createdAt: now,

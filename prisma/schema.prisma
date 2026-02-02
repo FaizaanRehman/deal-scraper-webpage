@@ -23,6 +23,7 @@ model Deal {
   id         Int      @id @default(autoincrement())
   owner      String   @default("unknown")
   caption    String
+  title      String?
   url        String   @unique
   imageUrl   String   @default("") // thumbnail / preview imageUrl
   mediaType  InstagramMediaType @default(IMAGE)
