@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+/localTestScripts
+tsconfig.scripts.json
 
 # next.js
 /.next/
@@ -23,6 +25,7 @@
 # misc
 .DS_Store
 *.pem
+neon_backup.sql
 
 # debug
 npm-debug.log*
