@@ -36,11 +36,6 @@ export async function uploadDealPreviewImage(
         public_id: fileName,
         overwrite: true,
         resource_type: 'image',
-        transformation: [
-          { quality: 'auto' },
-          // Automatically choose best format for the browser (WebP/AVIF)
-          { fetch_format: 'auto' },
-        ],
       }
     );
 
