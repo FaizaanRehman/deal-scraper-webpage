@@ -17,7 +17,14 @@ const DealCard: React.FC<DealCardProps> = ({
   showEndDate = true,
 }) => {
   return (
-    <li className="overflow-hidden rounded-lg bg-white p-4 shadow-sm transition hover:shadow-md">
+    <li
+      className="overflow-hidden rounded-xl p-4 shadow-md border transition hover:shadow-xl hover:scale-[1.02] duration-200"
+      style={{
+        backgroundColor: 'var(--color-card)',
+        borderColor: 'var(--color-card-border)',
+        color: 'var(--color-foreground)',
+      }}
+    >
       <a
         href={deal.url}
         target="_blank"
@@ -25,7 +32,7 @@ const DealCard: React.FC<DealCardProps> = ({
         className="block"
       >
         {/* Image preview */}
-        <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-gray-100">
+        <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
           <Image
             src={deal.imageUrl}
             alt="Instagram preview"
@@ -37,7 +44,7 @@ const DealCard: React.FC<DealCardProps> = ({
 
           {/* Optional media type indicator */}
           {deal.mediaType !== InstagramMediaType.IMAGE && (
-            <span className="absolute bottom-2 right-2 rounded bg-black/70 p-1.5 text-white">
+            <span className="absolute bottom-2 right-2 rounded-full bg-black/70 p-2 text-white">
               {deal.mediaType === InstagramMediaType.VIDEO ? (
                 <Video size={20} />
               ) : (
@@ -49,13 +56,16 @@ const DealCard: React.FC<DealCardProps> = ({
 
         {/* Title */}
         {deal.title && (
-          <h3 className="mt-2 line-clamp-2 text-base font-semibold text-gray-900">
+          <h3 className="mt-3 line-clamp-2 text-base sm:text-lg font-semibold">
             {deal.title}
           </h3>
         )}
 
         {/* Dates */}
-        <div className="mt-2 space-y-1 text-sm text-gray-500">
+        <div
+          className="mt-2 space-y-1 text-sm"
+          style={{ color: 'var(--color-muted)' }}
+        >
           {showStartDate && deal.startsAt && (
             <p>{formatRelativeDate(new Date(deal.startsAt), 'Starts')}</p>
           )}
