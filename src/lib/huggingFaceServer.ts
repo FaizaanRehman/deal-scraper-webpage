@@ -29,5 +29,7 @@ export async function generateDealTitle(
   }
 
   const json = await result.json();
-  return json.choices?.[0]?.message?.content?.trim() ?? null;
+  const responseText = json.choices?.[0]?.message?.content;
+  // Trim whitespace and remove surrounding quotes if present
+  return responseText?.trim().replace(/^["“”']+|["“”']+$/g, '') ?? null;
 }

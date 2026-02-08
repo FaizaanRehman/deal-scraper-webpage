@@ -8,10 +8,14 @@ import { formatRelativeDate } from '@/lib/dateFormatters';
 interface DealCardProps {
   deal: Deal;
   showStartDate?: boolean; // optional, defaults to true
-  showEndDate?: boolean;   // optional, defaults to true
+  showEndDate?: boolean; // optional, defaults to true
 }
 
-const DealCard: React.FC<DealCardProps> = ({ deal, showStartDate = true, showEndDate = true }) => {
+const DealCard: React.FC<DealCardProps> = ({
+  deal,
+  showStartDate = true,
+  showEndDate = true,
+}) => {
   return (
     <li className="overflow-hidden rounded-lg bg-white p-4 shadow-sm transition hover:shadow-md">
       <a
@@ -42,6 +46,13 @@ const DealCard: React.FC<DealCardProps> = ({ deal, showStartDate = true, showEnd
             </span>
           )}
         </div>
+
+        {/* Title */}
+        {deal.title && (
+          <h3 className="mt-2 line-clamp-2 text-base font-semibold text-gray-900">
+            {deal.title}
+          </h3>
+        )}
 
         {/* Dates */}
         <div className="mt-2 space-y-1 text-sm text-gray-500">
