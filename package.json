@@ -10,6 +10,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.9",
     "@prisma/client": "^6.13.0",
     "@supabase/supabase-js": "^2.91.1",
     "apify-client": "^2.21.0",

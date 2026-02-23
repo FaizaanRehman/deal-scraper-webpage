@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import ModeToggle from './ModeToggle';
 
 export default function Header() {
   return (
@@ -15,7 +16,7 @@ export default function Header() {
 
           {/* Right: Controls */}
           <div className="flex items-center gap-3">
-            {/* Placeholder for future controls */}
+            <ModeToggle />
           </div>
         </div>
       </div>
