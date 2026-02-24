@@ -1,13 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Deal from '@/types/deal';
+import { useDemoMode } from '@/context/DemoModeProvider';
+import DealResponse from '@/types/dealResponse';
 import DealCard from '@/components/DealCard';
-
-type DealResponse = {
-  current: Deal[];
-  upcoming: Deal[];
-};
+import { demoDeals } from '@/lib/demoDeals';
 
 export default function Home() {
   const [deals, setDeals] = useState<DealResponse>({
@@ -15,9 +12,18 @@ export default function Home() {
     upcoming: [],
   });
   const [loading, setLoading] = useState<boolean>(true);
+  const { isDemoMode } = useDemoMode();
 
   useEffect(() => {
     async function fetchDeals() {
+      if (isDemoMode) {
+        setDeals(demoDeals);
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+
       try {
         const response = await fetch('/api/deals');
         if (!response.ok) throw new Error('Failed to fetch');
@@ -36,7 +42,7 @@ export default function Home() {
     }
 
     fetchDeals();
-  }, []);
+  }, [isDemoMode]);
 
   return (
     <main className="min-h-screen px-4 py-8 sm:px-6 lg:px-8">

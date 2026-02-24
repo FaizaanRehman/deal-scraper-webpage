@@ -1,5 +1,6 @@
 import './globals.css';
 import Header from '@/components/Header';
+import { DemoModeProvider } from '@/context/DemoModeProvider';
 
 export const metadata = {
   title: 'Deal Scraper',
@@ -17,8 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Header />
-        {children}
+        <DemoModeProvider>
+          <Header />
+          {children}
+        </DemoModeProvider>
       </body>
     </html>
   );
