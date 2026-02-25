@@ -1,6 +1,7 @@
 import './globals.css';
 import Header from '@/components/Header';
 import { DemoModeProvider } from '@/context/DemoModeProvider';
+import { Suspense } from 'react';
 
 export const metadata = {
   title: 'Deal Scraper',
@@ -18,10 +19,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <DemoModeProvider>
-          <Header />
-          {children}
-        </DemoModeProvider>
+        <Suspense fallback={<div>Loading...</div>}>
+          <DemoModeProvider>
+            <Header />
+            {children}
+          </DemoModeProvider>
+        </Suspense>
       </body>
     </html>
   );
