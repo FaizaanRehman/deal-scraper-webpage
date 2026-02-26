@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { Video, Layers } from 'lucide-react';
+import { Video, Layers, CalendarIcon } from 'lucide-react';
 import Deal from '@/types/deal';
 import CardBadge from '@/components/CardBadge';
 import { InstagramMediaType } from '@prisma/client';
@@ -76,10 +76,16 @@ const DealCard: React.FC<DealCardProps> = ({
           style={{ color: 'var(--color-muted)' }}
         >
           {showStartDate && deal.startsAt && (
-            <p>{formatRelativeDate(new Date(deal.startsAt), 'Starts')}</p>
+            <span className="flex items-center gap-1.5">
+              <CalendarIcon size={16} className="opacity-70 mb-0.5" />
+              {formatRelativeDate(new Date(deal.startsAt), 'Starts')}
+            </span>
           )}
           {showEndDate && deal.endsAt && (
-            <p>{formatRelativeDate(new Date(deal.endsAt), 'Ends')}</p>
+            <span className="flex items-center gap-1.5">
+              <CalendarIcon size={16} className="opacity-70 mb-0.5" />
+              {formatRelativeDate(new Date(deal.endsAt), 'Ends')}
+            </span>
           )}
         </div>
 
