@@ -10,7 +10,7 @@ const WEEKDAYS = [
   'Saturday',
 ];
 
-function startOfDay(d: Date) : Date {
+function startOfDay(d: Date): Date {
   const x = new Date(d);
   x.setHours(0, 0, 0, 0);
   return x;
@@ -23,12 +23,15 @@ function startOfWeek(d: Date): Date {
   return x;
 }
 
-function daysBetween(a: Date, b: Date) : number {
+function daysBetween(a: Date, b: Date): number {
   const delta = startOfDay(b).getTime() - startOfDay(a).getTime();
   return Math.round(delta / MS_PER_DAY);
 }
 
-export function formatRelativeDate(date: Date, prefix: 'Starts' | 'Ends'): string {
+export function formatRelativeDate(
+  date: Date,
+  prefix: 'Starts' | 'Ends'
+): string {
   const now = new Date();
   const today = startOfDay(now);
   const target = startOfDay(date);
@@ -66,5 +69,11 @@ export function formatRelativeDate(date: Date, prefix: 'Starts' | 'Ends'): strin
   }
 
   // Fallback
-  return `${prefix} on ${target.toLocaleDateString()}`
+  return `${prefix} on ${target.toLocaleDateString()}`;
+}
+
+export function isDateSoon(date: Date): boolean {
+  return (
+    daysBetween(new Date(), date) >= 0 && daysBetween(new Date(), date) < 1
+  );
 }

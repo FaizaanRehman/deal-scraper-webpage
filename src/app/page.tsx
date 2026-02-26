@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useDemoMode } from '@/context/DemoModeProvider';
 import DealResponse from '@/types/dealResponse';
 import DealCard from '@/components/DealCard';
 import { demoDeals } from '@/lib/demoDeals';
+import { isDateSoon } from '@/lib/dateFormatters';
 
 export default function Home() {
   const [deals, setDeals] = useState<DealResponse>({
@@ -12,7 +13,18 @@ export default function Home() {
     upcoming: [],
   });
   const [loading, setLoading] = useState<boolean>(true);
+  const storedSeenDeals = useRef<Set<number>>(new Set()); // deal seen in previous sessions
+  const seenDeals = useRef<Set<number>>(new Set()); // deals seen in current session (starts with storedSeenDeals, adds new ones as we fetch)
   const { isDemoMode } = useDemoMode();
+
+  // Load seenDeals from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem('seenDeals');
+    if (stored) {
+      storedSeenDeals.current = new Set(JSON.parse(stored));
+      seenDeals.current = storedSeenDeals.current; // start with same set, will add new ones as we fetch
+    }
+  }, []);
 
   useEffect(() => {
     async function fetchDeals() {
@@ -33,6 +45,11 @@ export default function Home() {
           current: data.current ?? [],
           upcoming: data.upcoming ?? [],
         });
+
+        // Update seenDeals
+        [...(data.current ?? []), ...(data.upcoming ?? [])].forEach((deal) => {
+          seenDeals.current.add(deal.id);
+        });
       } catch (error) {
         console.error('Error fetching deals:', error);
         setDeals({ current: [], upcoming: [] }); // fallback to empty arrays
@@ -43,6 +60,21 @@ export default function Home() {
 
     fetchDeals();
   }, [isDemoMode]);
+
+  // Save seenDeals to localStorage on page unload
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      localStorage.setItem(
+        'seenDeals',
+        JSON.stringify(Array.from(seenDeals.current))
+      );
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   return (
     <main className="min-h-screen px-4 py-8 sm:px-6 lg:px-8">
@@ -79,6 +111,9 @@ export default function Home() {
                       deal={deal}
                       showStartDate={false}
                       showEndDate={true}
+                      isNew={!storedSeenDeals.current.has(deal.id)}
+                      isEndingSoon={isDateSoon(new Date(deal.endsAt))}
+                      isDemo={isDemoMode}
                     />
                   ))}
                 </ul>
@@ -105,6 +140,9 @@ export default function Home() {
                       deal={deal}
                       showStartDate={true}
                       showEndDate={false}
+                      isNew={!storedSeenDeals.current.has(deal.id)}
+                      isEndingSoon={isDateSoon(new Date(deal.endsAt))} // ending within 24 hours
+                      isDemo={isDemoMode}
                     />
                   ))}
                 </ul>

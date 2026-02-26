@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { Video, Layers } from 'lucide-react';
 import Deal from '@/types/deal';
+import CardBadge from '@/components/CardBadge';
 import { InstagramMediaType } from '@prisma/client';
 import { formatRelativeDate } from '@/lib/dateFormatters';
 
@@ -9,16 +10,24 @@ interface DealCardProps {
   deal: Deal;
   showStartDate?: boolean; // optional, defaults to true
   showEndDate?: boolean; // optional, defaults to true
+  isNew?: boolean; // optional, for "new" badge
+  isEndingSoon?: boolean; // optional, for "ending soon" badge
+  isDemo?: boolean; // optional, for demo mode badge
 }
 
 const DealCard: React.FC<DealCardProps> = ({
   deal,
   showStartDate = true,
   showEndDate = true,
+  isNew = false,
+  isEndingSoon = false,
+  isDemo = false,
 }) => {
+  isNew = isDemo ? deal.id % 2 === 1 : isNew; // For demo mode, mark even ID deals as new
+
   return (
     <li
-      className="overflow-hidden rounded-xl p-4 shadow-md border transition hover:shadow-xl hover:scale-[1.02] duration-200"
+      className="relative overflow-hidden rounded-xl p-4 shadow-md border transition hover:shadow-xl hover:scale-[1.02] duration-200"
       style={{
         backgroundColor: 'var(--color-card)',
         borderColor: 'var(--color-card-border)',
@@ -71,6 +80,15 @@ const DealCard: React.FC<DealCardProps> = ({
           )}
           {showEndDate && deal.endsAt && (
             <p>{formatRelativeDate(new Date(deal.endsAt), 'Ends')}</p>
+          )}
+        </div>
+
+        {/* Badges Container */}
+        <div className="absolute top-2 right-2 flex flex-col items-end gap-1">
+          {isDemo && <CardBadge text="DEMO" bgColor="bg-purple-600" />}
+          {isNew && <CardBadge text="NEW" bgColor="bg-green-600" />}
+          {isEndingSoon && (
+            <CardBadge text="ENDS SOON" bgColor="bg-orange-600" />
           )}
         </div>
       </a>
