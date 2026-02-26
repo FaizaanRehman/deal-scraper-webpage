@@ -13,6 +13,8 @@ export const INSTAGRAM_SOURCES = [
   'krispykremecan',
   'shelbyscanada',
   'chickenndough',
+  'chickqueenmarkham',
+  'chickqueencanada',
   'krispyfry_chicken',
   'simbashotchicken',
   'burnsroadkarachi',
