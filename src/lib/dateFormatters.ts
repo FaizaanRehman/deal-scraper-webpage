@@ -77,3 +77,7 @@ export function isDateSoon(date: Date): boolean {
     daysBetween(new Date(), date) >= 0 && daysBetween(new Date(), date) < 1
   );
 }
+
+export function hasDatePassed(date: Date): boolean {
+  return daysBetween(new Date(), date) < 0;
+}

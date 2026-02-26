@@ -4,10 +4,12 @@
 :root {
   --color-background: #f9fafb; /* light gray page background */
   --color-foreground: #111827; /* dark text */
+  --color-subtitle: #343a49; /* subtitle text */
   --color-header: #f3f4f6; /* header background in light mode */
   --color-card: #ffffff; /* card background in light mode */
   --color-card-border: #e5e7eb; /* subtle border for cards */
   --color-accent: #6366f1; /* Indigo-500 accent color */
+  --color-attention: #e53f03; /* Orange for ending soon */
   --color-muted: #6b7280; /* gray for secondary text */
 }
 
@@ -15,10 +17,12 @@
   :root {
     --color-background: #0a0a0a;
     --color-foreground: #f3f4f6;
+    --color-subtitle: #cccdd0;
     --color-header: #2a2a2a;
     --color-card: #1f1f1f;
     --color-card-border: #242424;
     --color-accent: #818cf8;
+    --color-attention: #ff6933; /* Orange for ending soon */
     --color-muted: #9ca3af;
   }
 }

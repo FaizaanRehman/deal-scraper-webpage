@@ -5,7 +5,7 @@ import { useDemoMode } from '@/context/DemoModeProvider';
 import DealResponse from '@/types/dealResponse';
 import DealCard from '@/components/DealCard';
 import { demoDeals } from '@/lib/demoDeals';
-import { isDateSoon } from '@/lib/dateFormatters';
+import { isDateSoon, hasDatePassed } from '@/lib/dateFormatters';
 
 export default function Home() {
   const [deals, setDeals] = useState<DealResponse>({
@@ -113,6 +113,7 @@ export default function Home() {
                       showEndDate={true}
                       isNew={!storedSeenDeals.current.has(deal.id)}
                       isEndingSoon={isDateSoon(new Date(deal.endsAt))}
+                      hasEnded={hasDatePassed(new Date(deal.endsAt))}
                       isDemo={isDemoMode}
                     />
                   ))}
@@ -142,6 +143,7 @@ export default function Home() {
                       showEndDate={false}
                       isNew={!storedSeenDeals.current.has(deal.id)}
                       isEndingSoon={isDateSoon(new Date(deal.endsAt))} // ending within 24 hours
+                      hasEnded={hasDatePassed(new Date(deal.endsAt))} // end date in the past
                       isDemo={isDemoMode}
                     />
                   ))}

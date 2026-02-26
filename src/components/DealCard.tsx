@@ -12,6 +12,7 @@ interface DealCardProps {
   showEndDate?: boolean; // optional, defaults to true
   isNew?: boolean; // optional, for "new" badge
   isEndingSoon?: boolean; // optional, for "ending soon" badge
+  hasEnded?: boolean; // optional, for "ended" badge
   isDemo?: boolean; // optional, for demo mode badge
 }
 
@@ -21,6 +22,7 @@ const DealCard: React.FC<DealCardProps> = ({
   showEndDate = true,
   isNew = false,
   isEndingSoon = false,
+  hasEnded = false,
   isDemo = false,
 }) => {
   isNew = isDemo ? deal.id % 2 === 1 : isNew; // For demo mode, mark even ID deals as new
@@ -38,7 +40,7 @@ const DealCard: React.FC<DealCardProps> = ({
         href={deal.url}
         target="_blank"
         rel="noopener noreferrer"
-        className="block"
+        className="flex flex-col h-full"
       >
         {/* Image preview */}
         <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
@@ -65,15 +67,21 @@ const DealCard: React.FC<DealCardProps> = ({
 
         {/* Title */}
         {deal.title && (
-          <h3 className="mt-3 line-clamp-2 text-base sm:text-lg font-semibold">
+          <h3 className="mt-3 mb-2 line-clamp-2 text-base sm:text-lg font-semibold">
             {deal.title}
           </h3>
         )}
 
         {/* Dates */}
         <div
-          className="mt-2 space-y-1 text-sm"
-          style={{ color: 'var(--color-muted)' }}
+          className="mt-auto space-y-1 text-sm"
+          style={{
+            color: hasEnded
+              ? 'var(--color-muted)'
+              : isEndingSoon
+                ? 'var(--color-attention)'
+                : 'var(--color-subtitle)',
+          }}
         >
           {showStartDate && deal.startsAt && (
             <span className="flex items-center gap-1.5">
