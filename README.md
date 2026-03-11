@@ -44,3 +44,8 @@
 ## Demo
 
 [https://dealscraperwebpage.netlify.app](https://dealscraperwebpage.netlify.app/?demo=1)
+
+## Screenshots
+
+<img width="1825" height="866" alt="image" src="https://github.com/user-attachments/assets/c01ce5dd-e114-4aa9-9f36-7bf53e502067" />
+
