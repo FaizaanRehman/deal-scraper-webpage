@@ -9,6 +9,7 @@ export interface Deal {
   imageUrl: string;
   startsAt: string;
   endsAt: string;
+  createdAt: string;
   mediaType: InstagramMediaType;
 }
 

@@ -7,22 +7,23 @@ import DealCard from '@/components/DealCard';
 import { demoDeals } from '@/lib/demoDeals';
 import { isDateSoon, hasDatePassed } from '@/lib/dateFormatters';
 
+const STORAGE_KEY_LAST_VISITED = 'lastVisited';
+
 export default function Home() {
   const [deals, setDeals] = useState<DealResponse>({
     current: [],
     upcoming: [],
   });
   const [loading, setLoading] = useState<boolean>(true);
-  const storedSeenDeals = useRef<Set<number>>(new Set()); // deal seen in previous sessions
-  const seenDeals = useRef<Set<number>>(new Set()); // deals seen in current session (starts with storedSeenDeals, adds new ones as we fetch)
+  const sessionStart = useRef<Date>(new Date());
+  const [lastVisited, setLastVisitedAt] = useState<Date>(new Date(0)); // default to epoch start for first-time visitors
   const { isDemoMode } = useDemoMode();
 
-  // Load seenDeals from localStorage on mount
+  // Load lastVisited from localStorage on mount
   useEffect(() => {
-    const stored = localStorage.getItem('seenDeals');
+    const stored = localStorage.getItem(STORAGE_KEY_LAST_VISITED);
     if (stored) {
-      storedSeenDeals.current = new Set(JSON.parse(stored));
-      seenDeals.current = storedSeenDeals.current; // start with same set, will add new ones as we fetch
+      setLastVisitedAt(new Date(stored));
     }
   }, []);
 
@@ -45,11 +46,6 @@ export default function Home() {
           current: data.current ?? [],
           upcoming: data.upcoming ?? [],
         });
-
-        // Update seenDeals
-        [...(data.current ?? []), ...(data.upcoming ?? [])].forEach((deal) => {
-          seenDeals.current.add(deal.id);
-        });
       } catch (error) {
         console.error('Error fetching deals:', error);
         setDeals({ current: [], upcoming: [] }); // fallback to empty arrays
@@ -65,8 +61,8 @@ export default function Home() {
   useEffect(() => {
     const handleBeforeUnload = () => {
       localStorage.setItem(
-        'seenDeals',
-        JSON.stringify(Array.from(seenDeals.current))
+        STORAGE_KEY_LAST_VISITED,
+        sessionStart.current.toISOString()
       );
     };
 
@@ -111,7 +107,7 @@ export default function Home() {
                       deal={deal}
                       showStartDate={false}
                       showEndDate={true}
-                      isNew={!storedSeenDeals.current.has(deal.id)}
+                      isNew={lastVisited < new Date(deal.createdAt)} // consider "new" if created after last visit
                       isEndingSoon={isDateSoon(new Date(deal.endsAt))}
                       hasEnded={hasDatePassed(new Date(deal.endsAt))}
                       isDemo={isDemoMode}
@@ -141,7 +137,7 @@ export default function Home() {
                       deal={deal}
                       showStartDate={true}
                       showEndDate={false}
-                      isNew={!storedSeenDeals.current.has(deal.id)}
+                      isNew={lastVisited < new Date(deal.createdAt)} // consider "new" if created after last visit
                       isEndingSoon={isDateSoon(new Date(deal.endsAt))} // ending within 24 hours
                       hasEnded={hasDatePassed(new Date(deal.endsAt))} // end date in the past
                       isDemo={isDemoMode}
