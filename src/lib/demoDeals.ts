@@ -22,6 +22,7 @@ export const demoDeals: DealResponse = {
         'https://res.cloudinary.com/dhmrgivjj/image/upload/v1771965984/SandalWoodExtravaganza_gcsrma.jpg',
       startsAt: new Date().toDateString(), // today
       endsAt: new Date(Date.now() + 6 * 60 * 60 * 1000).toDateString(), // 6 hours from now
+      createdAt: new Date().toDateString(),
       mediaType: 'CAROUSEL',
     },
     {
@@ -45,6 +46,7 @@ export const demoDeals: DealResponse = {
         'https://res.cloudinary.com/dhmrgivjj/image/upload/v1771885858/RollMeUpBogo_uw7wmj.jpg',
       startsAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toDateString(), // 2 days ago
       endsAt: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toDateString(), // tomorrow
+      createdAt: new Date().toDateString(),
       mediaType: 'IMAGE',
     },
     {
@@ -68,6 +70,7 @@ export const demoDeals: DealResponse = {
         'https://res.cloudinary.com/dhmrgivjj/image/upload/v1771885040/chickqueenSandwichSavings_crfttz.jpg',
       startsAt: new Date().toDateString(), // today
       endsAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toDateString(), // 3 days from now
+      createdAt: new Date().toDateString(),
       mediaType: 'IMAGE',
     },
   ],
@@ -91,6 +94,7 @@ export const demoDeals: DealResponse = {
         'https://res.cloudinary.com/dhmrgivjj/image/upload/v1771968925/pekingDuck_r72pzn.jpg',
       startsAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toDateString(), // 3 days from now
       endsAt: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toDateString(), // 10 days from now
+      createdAt: new Date().toDateString(),
       mediaType: 'VIDEO',
     },
     {
@@ -109,6 +113,7 @@ export const demoDeals: DealResponse = {
         'https://res.cloudinary.com/dhmrgivjj/image/upload/v1771965620/SundayPizzaDeal_tssoaf.jpg',
       startsAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toDateString(), // 1 week from now
       endsAt: new Date(Date.now() + 8 * 24 * 60 * 60 * 1000).toDateString(), // 1 week + 1 day from now
+      createdAt: new Date().toDateString(),
       mediaType: 'VIDEO',
     },
     {
@@ -137,6 +142,7 @@ export const demoDeals: DealResponse = {
         'https://res.cloudinary.com/dhmrgivjj/image/upload/v1771966430/ChatimeBubbleTea_i14kcg.jpg',
       startsAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toDateString(), // 2 weeks from now
       endsAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toDateString(), // 1 month from now
+      createdAt: new Date().toDateString(),
       mediaType: 'IMAGE',
     },
   ],
