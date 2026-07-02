@@ -26,5 +26,11 @@ export const INSTAGRAM_SOURCES = [
   'dspotcafe',
   'churchstxchickenca',
   'bboyz_ca_',
+  'turkishflamescanada',
+  'smshbrgr',
+  'saltandsugarto',
+  'supersmashburgs',
+  'halalpnw',
+  'chickochicken_markham',
   '6ixburgers'
 ] as const;
